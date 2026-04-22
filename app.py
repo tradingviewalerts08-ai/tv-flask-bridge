@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify
 import json
 
 app = Flask(__name__)
-
 latest_signal = {}
 
 @app.route('/signal', methods=['POST'])
@@ -17,7 +16,13 @@ def receive_signal():
 
 @app.route('/signal', methods=['GET'])
 def get_signal():
-    return jsonify(latest_signal), 200
+    global latest_signal
+    if not latest_signal:
+        return jsonify({}), 200          # nothing waiting
+    signal = latest_signal.copy()
+    latest_signal = {}                   # CLEAR after serving
+    print(f"Signal served and cleared: {signal}")
+    return jsonify(signal), 200
 
 @app.route('/', methods=['GET'])
 def home():
