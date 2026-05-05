@@ -7,7 +7,7 @@ latest_signal = {}
 @app.route('/signal', methods=['POST'])
 def receive_signal():
     global latest_signal
-    data = request.get_json()
+    data = request.get_json(force=True)
     if data:
         latest_signal = data
         print(f"Signal received: {data}")
